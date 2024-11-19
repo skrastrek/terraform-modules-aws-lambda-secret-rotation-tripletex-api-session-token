@@ -10,10 +10,8 @@ import {SecretsManagerRotationHandler} from "aws-lambda"
 import {SecretsManagerRotationEvent} from "aws-lambda/trigger/secretsmanager";
 import axios from "axios";
 import {
-    DescribeSecretResponse,
-    GetSecretValueResponse
+    DescribeSecretResponse
 } from "@aws-sdk/client-secrets-manager/dist-types/models/models_0";
-import {BasicCredentials} from "./types";
 import {addDays, format} from "date-fns";
 
 const TRIPLETEX_API_BASE_URL = process.env.TRIPLETEX_API_BASE_URL!!
@@ -72,7 +70,7 @@ export const handler: SecretsManagerRotationHandler = async event => {
  If one does not exist, it will generate a new secret and put it with the passed in token.
  */
 const createSecret = async (event: SecretsManagerRotationEvent): Promise<void> => {
-    // Make sure the current secret exists
+    // Make sure the current secret value exists
     const currentSecretValue = await secretsManagerClient.send(
         new GetSecretValueCommand({
             SecretId: event.SecretId,
@@ -80,9 +78,7 @@ const createSecret = async (event: SecretsManagerRotationEvent): Promise<void> =
         })
     );
 
-    const currentCredentials: BasicCredentials = basicCredentials(currentSecretValue)
-
-    // Now try to get the secret version, if that fails, put a new secret
+    // Try to get the pending secret value, if that fails, put a new secret
     try {
         await secretsManagerClient.send(
             new GetSecretValueCommand({
@@ -121,11 +117,8 @@ const createSecret = async (event: SecretsManagerRotationEvent): Promise<void> =
                 await secretsManagerClient.send(
                     new PutSecretValueCommand({
                         SecretId: event.SecretId,
+                        SecretString: sessionTokenResponse.data.value.token,
                         ClientRequestToken: event.ClientRequestToken,
-                        SecretString: JSON.stringify({
-                            username: currentCredentials.username,
-                            password: sessionTokenResponse.data.value.token
-                        }),
                         VersionStages: ["AWSPENDING"]
                     })
                 )
@@ -156,12 +149,13 @@ const testSecret = async (event: SecretsManagerRotationEvent): Promise<void> => 
         })
     )
 
-    const pendingCredentials = basicCredentials(pendingSecretValue)
-
     const loggedInUserResponse = await axios({
         method: "get",
         url: `${TRIPLETEX_API_BASE_URL}/token/session/>whoAmI`,
-        auth: pendingCredentials,
+        auth: {
+            username: "",
+            password: pendingSecretValue.SecretString!!,
+        },
     })
 
     console.info(loggedInUserResponse.data)
@@ -184,14 +178,11 @@ const finishSecret = async (event: SecretsManagerRotationEvent, secret: Describe
     await secretsManagerClient.send(
         new UpdateSecretVersionStageCommand({
             SecretId: event.SecretId,
-            VersionStage: "AWSCURRENT",
             MoveToVersionId: event.ClientRequestToken,
             RemoveFromVersionId: currentVersionId,
+            VersionStage: "AWSCURRENT",
         })
     )
 
     console.info(`Successfully set AWSCURRENT stage to version ${event.ClientRequestToken} for secret ${event.SecretId}.`)
 }
-
-const basicCredentials = (secretValue: GetSecretValueResponse): BasicCredentials =>
-    JSON.parse(secretValue.SecretString!!)
