@@ -15,9 +15,10 @@ import {
 import {addDays, format} from "date-fns";
 
 const TRIPLETEX_API_BASE_URL = process.env.TRIPLETEX_API_BASE_URL!!
-const TRIPLETEX_CONSUMER_TOKEN_SECRET_ARN = process.env.TRIPLETEX_CONSUMER_TOKEN_SECRET_ARN!!
-const TRIPLETEX_EMPLOYEE_TOKEN_SECRET_ARN = process.env.TRIPLETEX_EMPLOYEE_TOKEN_SECRET_ARN!!
-const TRIPLETEX_SESSION_TOKEN_DURATION_IN_DAYS = Number(process.env.TRIPLETEX_SESSION_TOKEN_DURATION_IN_DAYS!!)
+const TRIPLETEX_API_COMPANY_ID = process.env.TRIPLETEX_API_COMPANY_ID!!
+const TRIPLETEX_API_CONSUMER_TOKEN_SECRET_ARN = process.env.TRIPLETEX_API_CONSUMER_TOKEN_SECRET_ARN!!
+const TRIPLETEX_API_EMPLOYEE_TOKEN_SECRET_ARN = process.env.TRIPLETEX_API_EMPLOYEE_TOKEN_SECRET_ARN!!
+const TRIPLETEX_API_SESSION_TOKEN_DURATION_IN_DAYS = Number(process.env.TRIPLETEX_API_SESSION_TOKEN_DURATION_IN_DAYS!!)
 
 const secretsManagerClient = new SecretsManagerClient()
 
@@ -92,17 +93,17 @@ const createSecret = async (event: SecretsManagerRotationEvent): Promise<void> =
             case ResourceNotFoundException:
                 const consumerTokenSecretValue = await secretsManagerClient.send(
                     new GetSecretValueCommand({
-                        SecretId: TRIPLETEX_CONSUMER_TOKEN_SECRET_ARN
+                        SecretId: TRIPLETEX_API_CONSUMER_TOKEN_SECRET_ARN
                     })
                 )
 
                 const employeeTokenSecretValue = await secretsManagerClient.send(
                     new GetSecretValueCommand({
-                        SecretId: TRIPLETEX_EMPLOYEE_TOKEN_SECRET_ARN
+                        SecretId: TRIPLETEX_API_EMPLOYEE_TOKEN_SECRET_ARN
                     })
                 )
 
-                const expirationDate = addDays(new Date(), TRIPLETEX_SESSION_TOKEN_DURATION_IN_DAYS)
+                const expirationDate = addDays(new Date(), TRIPLETEX_API_SESSION_TOKEN_DURATION_IN_DAYS)
 
                 const sessionTokenResponse = await axios({
                     method: "put",
@@ -153,7 +154,7 @@ const testSecret = async (event: SecretsManagerRotationEvent): Promise<void> => 
         method: "get",
         url: `${TRIPLETEX_API_BASE_URL}/token/session/>whoAmI`,
         auth: {
-            username: "",
+            username: TRIPLETEX_API_COMPANY_ID,
             password: pendingSecretValue.SecretString!!,
         },
     })

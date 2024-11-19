@@ -44,10 +44,11 @@ resource "aws_lambda_function" "this" {
 
   environment {
     variables = {
-      TRIPLETEX_API_BASE_URL                   = var.tripletex_api_base_url
-      TRIPLETEX_CONSUMER_TOKEN_SECRET_ARN      = var.tripletex_api_consumer_token_secret_arn
-      TRIPLETEX_EMPLOYEE_TOKEN_SECRET_ARN      = var.tripletex_api_employee_token_secret_arn
-      TRIPLETEX_SESSION_TOKEN_DURATION_IN_DAYS = var.tripletex_api_session_token_duration_in_days
+      TRIPLETEX_API_BASE_URL                       = var.tripletex_api_base_url
+      TRIPLETEX_API_COMPANY_ID                     = var.tripletex_api_company_id
+      TRIPLETEX_API_CONSUMER_TOKEN_SECRET_ARN      = var.tripletex_api_consumer_token_secret_arn
+      TRIPLETEX_API_EMPLOYEE_TOKEN_SECRET_ARN      = var.tripletex_api_employee_token_secret_arn
+      TRIPLETEX_API_SESSION_TOKEN_DURATION_IN_DAYS = var.tripletex_api_session_token_duration_in_days
     }
   }
 }

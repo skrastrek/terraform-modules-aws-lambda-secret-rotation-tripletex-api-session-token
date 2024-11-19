@@ -37,6 +37,10 @@ variable "tripletex_api_base_url" {
   type = string
 }
 
+variable "tripletex_api_company_id" {
+  type = string
+}
+
 variable "tripletex_api_consumer_token_secret_arn" {
   type = string
 }
