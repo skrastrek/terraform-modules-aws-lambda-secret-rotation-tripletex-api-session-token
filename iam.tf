@@ -38,7 +38,7 @@ module "tripletex_api_session_token_secret_read_write_role_policy" {
   source = "github.com/skrastrek/terraform-modules-aws-iam//role-policy/secretsmanager-secret-read-write?ref=v0.1.3"
 
   role_name   = aws_iam_role.this.name
-  policy_name = "tripletex-api-session-token-secret-read"
+  policy_name = "tripletex-api-session-token-secret-read-write"
 
   secret_arn = var.tripletex_api_session_token_secret_arn
 }
