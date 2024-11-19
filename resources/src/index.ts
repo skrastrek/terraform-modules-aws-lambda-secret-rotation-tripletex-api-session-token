@@ -110,7 +110,7 @@ const createSecret = async (event: SecretsManagerRotationEvent): Promise<void> =
                     params: {
                         consumerToken: consumerTokenSecretValue.SecretString,
                         employeeToken: employeeTokenSecretValue.SecretString,
-                        expirationDate: format(expirationDate, "YYYY-MM-DD")
+                        expirationDate: format(expirationDate, "yyyy-MM-dd")
                     }
                 })
 
