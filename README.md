@@ -1,1 +1,1 @@
-# terraform-modules-aws-lambda-secret-rotator-tripletex-api-session-token
+# terraform-modules-aws-lambda-secret-rotation-tripletex-api-session-token

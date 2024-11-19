@@ -1,0 +1,19 @@
+{
+  "name": "lambda-secret-rotation-tripletex-api-session-token",
+  "version": "1.0.0",
+  "private": true,
+  "main": "src/index.ts",
+  "dependencies": {
+    "axios": "^1.7.7",
+    "date-fns": "^4.1.0"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.145",
+    "@types/node": "^22.7.5",
+    "@aws-sdk/client-secrets-manager": "^3.669.0",
+    "esbuild": "^0.24.0"
+  },
+  "scripts": {
+    "build": "esbuild src/index.ts --bundle --minify --platform=node --target=node20 --outdir=dist"
+  }
+}
