@@ -25,14 +25,14 @@ resource "aws_lambda_function" "this" {
 
   publish = true
 
-  runtime       = "nodejs20.x"
+  runtime = "nodejs20.x"
   architectures = ["arm64"]
 
   memory_size = var.memory_size
 
   handler = "index.handler"
 
-  package_type     = title(data.archive_file.zip.type)
+  package_type = title(data.archive_file.zip.type)
   filename         = data.archive_file.zip.output_path
   source_code_hash = data.archive_file.zip.output_base64sha256
 
@@ -58,4 +58,13 @@ resource "aws_cloudwatch_log_group" "this" {
   kms_key_id        = var.cloudwatch_log_group_kms_key_id
 
   tags = var.tags
+}
+
+resource "aws_lambda_permission" "invoke_from_secrets_manager" {
+  function_name = aws_lambda_function.this.function_name
+
+  statement_id = "InvokeFromSecretsManager"
+  action       = "lambda:InvokeFunction"
+  principal    = "secretsmanager.amazonaws.com"
+  source_arn   = var.tripletex_api_session_token_secret_arn
 }
