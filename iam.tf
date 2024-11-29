@@ -26,7 +26,7 @@ module "tripletex_api_consumer_token_secret_read_role_policy" {
 }
 
 module "tripletex_api_employee_token_secret_read_role_policy" {
-  source = "github.com/skrastrek/terraform-modules-aws-iam//role-policy/secretsmanager-secret-read?ref=v0.1.3"
+  source = "github.com/skrastrek/terraform-modules-aws-iam//role-policy/secretsmanager-secret-read?ref=v0.2.0"
 
   role_name   = aws_iam_role.this.name
   policy_name = "tripletex-api-employee-token-secret-read"
