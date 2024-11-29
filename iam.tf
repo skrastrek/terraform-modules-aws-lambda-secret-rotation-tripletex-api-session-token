@@ -17,7 +17,7 @@ resource "aws_iam_role_policy_attachment" "aws_lambda_basic_execution_role" {
 }
 
 module "tripletex_api_consumer_token_secret_read_role_policy" {
-  source = "github.com/skrastrek/terraform-modules-aws-iam//role-policy/secretsmanager-secret-read?ref=v0.1.3"
+  source = "github.com/skrastrek/terraform-modules-aws-iam//role-policy/secretsmanager-secret-read?ref=v0.2.0"
 
   role_name   = aws_iam_role.this.name
   policy_name = "tripletex-api-consumer-token-secret-read"
