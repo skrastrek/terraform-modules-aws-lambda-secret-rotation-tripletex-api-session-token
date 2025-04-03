@@ -11,7 +11,7 @@
     "@types/aws-lambda": "^8.10.147",
     "@types/node": "^22.13.9",
     "@aws-sdk/client-secrets-manager": "^3.777.0",
-    "esbuild": "^0.25.0"
+    "esbuild": "^0.25.2"
   },
   "scripts": {
     "build": "esbuild src/index.ts --bundle --minify --platform=node --target=node20 --outdir=dist"
