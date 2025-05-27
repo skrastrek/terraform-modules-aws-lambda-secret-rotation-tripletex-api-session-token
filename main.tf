@@ -4,7 +4,7 @@ locals {
 
 data "external" "npm_build" {
   program = [
-    "bash", "-c", <<EOT
+    "sh", "-c", <<EOT
 (npm ci && npm run build) >&2 && echo "{\"filename\": \"index.js\"}"
 EOT
   ]
