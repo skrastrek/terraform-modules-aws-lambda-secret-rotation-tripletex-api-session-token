@@ -8,10 +8,10 @@
     "date-fns": "^4.1.0"
   },
   "devDependencies": {
-    "@types/aws-lambda": "^8.10.157",
-    "@types/node": "^24.9.2",
-    "@aws-sdk/client-secrets-manager": "^3.922.0",
-    "esbuild": "^0.25.11"
+    "@types/aws-lambda": "^8.10.159",
+    "@types/node": "^25.0.2",
+    "@aws-sdk/client-secrets-manager": "^3.952.0",
+    "esbuild": "^0.27.1"
   },
   "scripts": {
     "build": "esbuild src/index.ts --bundle --minify --platform=node --target=node22 --outdir=dist"
